@@ -76,6 +76,7 @@ curl -X DELETE 'http://localhost:8080/api/v1/mybank/transactions/{id}'
 ```
 
 ## project structure
+```
 src/
 ├── main/
 │   └── java/
@@ -88,9 +89,11 @@ src/
 │                   ├── domain/       # entity class
 │                   ├── exception/   
 │                   └── service/     # business logic
+```
 
 ## Database design
 ### Transaction entity
+```
 | column | type|
 |------|------|------|
 | id | BIGINT | Primary ID |
@@ -103,6 +106,7 @@ src/
 | status | VARCHAR(20) |
 | created_at | TIMESTAMP|
 | updated_at | TIMESTAMP |
+```
 
 ### Transaction type
 - DEPOSIT
