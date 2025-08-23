@@ -17,10 +17,10 @@ import jakarta.validation.constraints.Max;
 @AllArgsConstructor
 public class PageRequest {
     
-    @Min(value = 1, message = "页码必须大于0")
+    @Min(value = 1, message = "page must greater than 0")
     private Integer page = 1;
     
-    @Min(value = 1, message = "页面大小必须大于0")
-    @Max(value = 100, message = "页面大小不能超过100")
+    @Min(value = 1, message = "size of page must greater than 0")
+    @Max(value = 100, message = "size of page mus less than 100")
     private Integer size = 20;
 }

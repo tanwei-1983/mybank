@@ -4,6 +4,7 @@ import com.mybank.transaction.domain.PageRequest;
 import com.mybank.transaction.domain.PageResponse;
 import com.mybank.transaction.domain.TransactionRequest;
 import com.mybank.transaction.domain.Transaction;
+import com.mybank.transaction.exception.DuplicateTransactionException;
 import com.mybank.transaction.exception.TransactionNotFoundException;
 import com.mybank.transaction.dao.TransactionDao;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 交易服务实现类
+ * Implement Transaction Service
  */
 @Slf4j
 @Service
@@ -29,7 +30,7 @@ public class TransactionService {
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction createTransaction(TransactionRequest request) {
-        log.info("创建交易: {}", request);
+        log.info("Create Transaction: {}", request);
 
 
         Transaction transaction = Transaction.builder()
@@ -43,20 +44,22 @@ public class TransactionService {
                 .status("COMPLETED")
                 .createdAt(LocalDateTime.now())
                 .build();
+        try {
+            transactionDao.insTran(transaction);
+        } catch (Exception e) {
+            throw new DuplicateTransactionException("duplicate transaction id");
+        }
         
-        transactionDao.insTran(transaction);
-        
-        log.info("交易创建成功: {}", transaction.getId());
+        log.info("Create Transaction Success: {}", transaction.getId());
         return transaction;
     }
 
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction updateTransaction(Long id, TransactionRequest request) {
-        log.info("更新交易: id={}, request={}", id, request);
+        log.info("update transaction: id={}, request={}", id, request);
         Transaction transaction = Transaction.builder()
                 .id(id)
-//                .transactionId(existingTransaction.getTransactionId())
                 .accountNumber(request.getAccountNumber())
                 .transactionType(request.getTransactionType())
                 .amount(request.getAmount())
@@ -68,21 +71,21 @@ public class TransactionService {
                 .build();
 
         int updCnt = transactionDao.updTran(transaction);
-        if (updCnt == 0) throw new TransactionNotFoundException("交易不存在: " + id);
+        if (updCnt == 0) throw new TransactionNotFoundException("transaction doesn't exist: " + id);
         
-        log.info("交易更新成功: {}", id);
+        log.info("update transaction success: {}", id);
         return transaction;
     }
 
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
     public void deleteTransaction(Long id) {
-        log.info("删除交易: {}", id);
+        log.info("delete transaction: {}", id);
         
 
         int delCnt = transactionDao.deleteById(id);
-        if (delCnt == 0) throw new TransactionNotFoundException("交易不存在: " + id);
-        log.info("交易删除成功: {}", id);
+        if (delCnt == 0) throw new TransactionNotFoundException("transaction doesn't exist: " + id);
+        log.info("delete transaction success: {}", id);
     }
 
     @Cacheable(value = "transactions", key = "'all_' + #pageRequest.page + '_' + #pageRequest.size")

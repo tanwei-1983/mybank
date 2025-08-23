@@ -19,6 +19,7 @@ import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootTest
 @Transactional
@@ -29,8 +30,7 @@ public class ServiceStressTest {
 
     @Autowired private TransactionDao transactionDao;
 
-    private TransactionRequest validRequest1, validRequest2;
-//    private Transaction sampleTransaction;
+    private TransactionRequest validRequest1;
 
     @BeforeEach
     void setUp() {
@@ -45,70 +45,71 @@ public class ServiceStressTest {
 }
     @Test
     void stressTest() {
-        int parallelDeg = 8;
-        List<Long>idList = new ArrayList<>();
+        int parallelDeg = 500, nums=500000, totalNum=0;
         var executor = Executors.newFixedThreadPool(parallelDeg);
-        Vector<String>excepMsg = new Vector<>();
+        AtomicInteger atomInt = new AtomicInteger(0);
         long t1 = System.currentTimeMillis();
-        for (int i = 0; i < 10000; ++i) {
+        totalNum += nums;
+        for (int i = 0; i < nums; ++i) {
             executor.submit(() -> {
                 try {
-                    idList.add(transactionService.createTransaction(validRequest1).getId());
+                    transactionService.createTransaction(validRequest1);
                 }catch(Exception e){
-                    excepMsg.add(e.getMessage());
+                    atomInt.incrementAndGet();
                 }
             });
         }
         close(executor);
-        double createTransReq = 10000*1000.00/(System.currentTimeMillis()-t1);
+        double createTransReq = nums*1000.00/(System.currentTimeMillis()-t1);
 
         executor = Executors.newFixedThreadPool(parallelDeg);
+        totalNum += nums;
         t1 = System.currentTimeMillis();
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < nums; ++i) {
             executor.submit(() -> {
                 try {
                     PageRequest pageRequest = new PageRequest(10, 10);
                     transactionService.getAllTransactions(pageRequest);
                 } catch (Exception e) {
-                    excepMsg.add(e.getMessage());
+                    atomInt.incrementAndGet();
                 }
             });
         }
         close(executor);
-        double getAllTransactionsReqs = 10000*1000.00/(System.currentTimeMillis()-t1);
+        double getAllTransactionsReqs = nums*1000.00/(System.currentTimeMillis()-t1);
+
+        List<Long> idList=transactionDao.listId();
 
         executor = Executors.newFixedThreadPool(parallelDeg);
+        totalNum += idList.size();
         t1 = System.currentTimeMillis();
-        for (int i = 0; i < 10000; ++i) {
-            int finalI = i;
+        for (long nid : idList) {
             executor.submit(() -> {
                 try {
-                    transactionService.updateTransaction(idList.get(finalI), validRequest1);
+                    transactionService.updateTransaction(nid, validRequest1);
                 } catch (Exception e) {
-                    excepMsg.add(e.getMessage());
+                    atomInt.incrementAndGet();
                 }
             });
         }
         close(executor);
-        double updTransReqs = 10000*1000.00/(System.currentTimeMillis()-t1);
-
+        double updTransReqs = nums*1000.00/(System.currentTimeMillis()-t1);
 
         executor = Executors.newFixedThreadPool(parallelDeg);
+        totalNum += idList.size();
         t1 = System.currentTimeMillis();
-        for (int i = 0; i < 10000; ++i) {
-            int finalI = i;
+        for (long nid : idList) {
             executor.submit(() -> {
                 try {
-                    transactionService.deleteTransaction(idList.get(finalI));
+                    transactionService.deleteTransaction(nid);
                 } catch (Exception e) {
-                    excepMsg.add(e.getMessage());
+                    atomInt.incrementAndGet();
                 }
             });
         }
         close(executor);
-        if(excepMsg.size() > 0) throw new RuntimeException("CATCH EXCEPTION");
-        double delReqs = 10000*1000.00/(System.currentTimeMillis()-t1);
-        System.out.println("createTransaction req/s:" + createTransReq +", getAllTransactions req/s:"
+        double delReqs = nums*1000.00/(System.currentTimeMillis()-t1);
+        System.out.println("error transaction ratio:" + atomInt.intValue()*1.0/ totalNum + ", createTransaction req/s:" + createTransReq +", getAllTransactions req/s:"
                 + getAllTransactionsReqs + ", updateTransaction req/s:" +updTransReqs + ", deleteTransaction req/s:" + delReqs);
     }
 

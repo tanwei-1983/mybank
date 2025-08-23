@@ -8,10 +8,10 @@ LABEL maintainer="xxl@xx.com"
 WORKDIR /app
 
 # 将打包后的 JAR 文件复制到容器中
-COPY target/transaction-management-1.0.0.jar /app/transaction-management-1.0.0.jar
+COPY target/transaction-management-1.0.0.jar app.jar
 
 # 暴露 Spring Boot 默认端口
 EXPOSE 8080
 
 # 定义容器启动时的命令
-ENTRYPOINT ["java", "-jar", "/app/transaction-management-1.0.0.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

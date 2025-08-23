@@ -47,4 +47,6 @@ public interface TransactionDao {
      * 统计总交易数
      */
     long countTotal();
+
+    List<Long> listId();
 }

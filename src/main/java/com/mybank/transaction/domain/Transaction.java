@@ -21,11 +21,6 @@ public class Transaction {
     private Long id;
     
     /**
-     * 交易ID（业务唯一标识）
-     */
-//    private String transactionId;
-    
-    /**
      * 账户号码
      */
     private String accountNumber;
