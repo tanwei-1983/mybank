@@ -63,8 +63,19 @@ curl -X GET 'http://localhost:8080/api/v1/mybank/transactions?page=1&size=20'
 ```bash
 curl -X DELETE 'http://localhost:8080/api/v1/mybank/transactions/{id}'
 ```
-## project structure
+### API response data format
+```json
+{
+  "success": true,
+  "message": "success",
+  "data": {
+     
+  },
+  "timestamp": "2024-01-01T12:00:00"
+}
 ```
+
+## project structure
 src/
 ├── main/
 │   └── java/
@@ -77,7 +88,6 @@ src/
 │                   ├── domain/       # entity class
 │                   ├── exception/   
 │                   └── service/     # business logic
-```
 
 ## Database design
 ### Transaction entity
