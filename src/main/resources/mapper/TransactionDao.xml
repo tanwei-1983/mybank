@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybank.transaction.dao.TransactionDao">
+
+    <resultMap id="TransactionResultMap" type="com.mybank.transaction.domain.Transaction">
+        <id column="id" property="id"/>
+        <result column="account_number" property="accountNumber"/>
+        <result column="transaction_type" property="transactionType"/>
+        <result column="amount" property="amount"/>
+        <result column="currency" property="currency"/>
+        <result column="description" property="description"/>
+        <result column="category" property="category"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account_number, transaction_type, amount, currency,
+        description, category, status, created_at, updated_at
+    </sql>
+
+    <insert id="insTran" parameterType="com.mybank.transaction.domain.Transaction" >
+        INSERT INTO t_r_transaction (id,
+            account_number, transaction_type, amount, currency,
+            description, category, status, created_at, updated_at
+        ) VALUES (#{id},
+            #{accountNumber}, #{transactionType}, #{amount}, #{currency},
+            #{description}, #{category}, #{status}, #{createdAt}, #{updatedAt}
+        )
+    </insert>
+
+    <select id="selectById" resultMap="TransactionResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_r_transaction
+        WHERE id = #{id}
+    </select>
+
+    <update id="updTran" parameterType="com.mybank.transaction.domain.Transaction">
+        UPDATE t_r_transaction
+        SET account_number = #{accountNumber},
+            transaction_type = #{transactionType},
+            amount = #{amount},
+            currency = #{currency},
+            description = #{description},
+            category = #{category},
+            status = #{status},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_r_transaction WHERE id = #{id}
+    </delete>
+
+    <select id="selectByPage" resultMap="TransactionResultMap">
+        SELECT
+        t1.id, t1.account_number, t1.transaction_type, t1.amount, t1.currency,
+        t1.description, t1.category, t1.status, t1.created_at, t1.updated_at
+        FROM t_r_transaction t1
+        join (select id from t_r_transaction LIMIT #{limit} OFFSET #{offset})t2 on t1.id = t2.id
+        order by t1.id
+    </select>
+
+    <select id="countTotal" resultType="long">
+        SELECT COUNT(*) FROM t_r_transaction
+    </select>
+
+</mapper>
