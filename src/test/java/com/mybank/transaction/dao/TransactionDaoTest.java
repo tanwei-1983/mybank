@@ -38,7 +38,7 @@ class TransactionDaoTest {
                 .transactionType("DEPOSIT")
                 .amount(new BigDecimal("1000.00"))
                 .currency("CNY")
-                .description("测试存款")
+                .description("test DEPOSIT")
                 .category("SALARY")
                 .status("COMPLETED")
                 .createdAt(LocalDateTime.now())
@@ -93,7 +93,7 @@ class TransactionDaoTest {
                 .transactionType("WITHDRAWAL")
                 .amount(new BigDecimal("500.00"))
                 .currency("CNY")
-                .description("测试取款")
+                .description("test WITHDRAWAL")
                 .category("FOOD")
                 .status("COMPLETED")
                 .updatedAt(LocalDateTime.now())
@@ -108,7 +108,7 @@ class TransactionDaoTest {
         Transaction updated = transactionDao.selectById(id);
         assertEquals("WITHDRAWAL", updated.getTransactionType());
         assertEquals(new BigDecimal("500.00"), updated.getAmount());
-        assertEquals("测试取款", updated.getDescription());
+        assertEquals("test WITHDRAWAL", updated.getDescription());
     }
 
     @Test
@@ -123,54 +123,4 @@ class TransactionDaoTest {
         Transaction deleted = transactionDao.selectById(id);
         assertNull(deleted);
     }
-
-//    @Test
-//    void testSelectByPage() {
-//        // Given
-//        Transaction transaction1 = Transaction.builder()
-//                .accountNumber("1111111111111111")
-//                .transactionType("DEPOSIT")
-//                .amount(new BigDecimal("1000.00"))
-//                .currency("CNY")
-//                .description("测试1")
-//                .category("SALARY")
-//                .status("COMPLETED")
-//                .createdAt(LocalDateTime.now())
-//                .updatedAt(LocalDateTime.now())
-//                .build();
-//
-//        Transaction transaction2 = Transaction.builder()
-//                .accountNumber("2222222222222222")
-//                .transactionType("WITHDRAWAL")
-//                .amount(new BigDecimal("500.00"))
-//                .currency("CNY")
-//                .description("测试2")
-//                .category("FOOD")
-//                .status("COMPLETED")
-//                .createdAt(LocalDateTime.now())
-//                .updatedAt(LocalDateTime.now())
-//                .build();
-//
-//        transactionDao.insTran(transaction1);
-//        transactionDao.insTran(transaction2);
-//
-//        // When
-//        List<Transaction> transactions = transactionDao.selectByPage(0, 10);
-//
-//        // Then
-//        assertNotNull(transactions);
-//        assertTrue(transactions.size() >= 2);
-//    }
-
-//    @Test
-//    void testCountTotal() {
-//        // Given
-//        transactionDao.insTran(testTransaction);
-//
-//        // When
-//        long count = transactionDao.countTotal();
-//
-//        // Then
-//        assertTrue(count > 0);
-//    }
 }

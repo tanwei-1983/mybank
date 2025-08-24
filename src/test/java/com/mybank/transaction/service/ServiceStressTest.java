@@ -2,8 +2,6 @@ package com.mybank.transaction.service;
 
 import com.mybank.transaction.dao.TransactionDao;
 import com.mybank.transaction.domain.PageRequest;
-import com.mybank.transaction.domain.PageResponse;
-import com.mybank.transaction.domain.Transaction;
 import com.mybank.transaction.domain.TransactionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -109,8 +105,8 @@ public class ServiceStressTest {
         }
         close(executor);
         double delReqs = nums*1000.00/(System.currentTimeMillis()-t1);
-        System.out.println("error transaction ratio:" + atomInt.intValue()*1.0/ totalNum + ", createTransaction req/s:" + createTransReq +", getAllTransactions req/s:"
-                + getAllTransactionsReqs + ", updateTransaction req/s:" +updTransReqs + ", deleteTransaction req/s:" + delReqs);
+        System.out.println("error transaction ratio: " + atomInt.intValue()*1.0/ totalNum +", total api calls: " + totalNum +", createTransaction req/s: " + createTransReq +", getAllTransactions req/s: "
+                + getAllTransactionsReqs + ", updateTransaction req/s: " +updTransReqs + ", deleteTransaction req/s: " + delReqs);
     }
 
     private void close(ExecutorService executor){

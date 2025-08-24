@@ -39,7 +39,7 @@ class TransactionServiceTest {
     @BeforeEach
     void setUp() {
         validRequest1 = TransactionRequest.builder()
-                .accountNumber("1111111111111")
+                .accountNumber("1111111111111111")
                 .transactionType("DEPOSIT")
                 .amount(new BigDecimal("1000.00"))
                 .currency("CNY")
@@ -47,7 +47,7 @@ class TransactionServiceTest {
                 .category("SALARY")
                 .build();
         validRequest2 = TransactionRequest.builder()
-                .accountNumber("22222222222")
+                .accountNumber("2222222222222222")
                 .transactionType("TRANSFER")
                 .amount(new BigDecimal("2000.00"))
                 .currency("CNY")
@@ -90,6 +90,7 @@ class TransactionServiceTest {
         assertEquals("TRANSFER", updated.getTransactionType());
         assertEquals(new BigDecimal("2000.00"), updated.getAmount());
         assertEquals("test food", updated.getDescription());
+        assertEquals("FOOD", updated.getCategory());
     }
 
     @Test
@@ -120,7 +121,7 @@ class TransactionServiceTest {
         PageResponse<Transaction> response = transactionService.getAllTransactions(pageRequest);
         var trans = response.getContent().get(0);
 
-        assertEquals(trans.getAccountNumber(), "1111111111111");
+        assertEquals(trans.getAccountNumber(), "1111111111111111");
         assertEquals(trans.getTransactionType(), "DEPOSIT");
         assertEquals(trans.getAmount(), new BigDecimal("1000.00"));
         assertEquals(1, response.getContent().size());

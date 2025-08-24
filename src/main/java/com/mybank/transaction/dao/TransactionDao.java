@@ -20,7 +20,7 @@ public interface TransactionDao {
     /**
      * 根据ID查询交易
      */
-    Transaction selectById(@Param("id") Long id);
+    Transaction selectById(Long id);
     
     /**
      * 根据交易ID查询交易
@@ -34,14 +34,13 @@ public interface TransactionDao {
     /**
      * 删除交易记录
      */
-    int deleteById(@Param("id") Long id);
+    int deleteById(Long id);
     
     /**
      * 分页查询交易列表
      */
 
-    List<Transaction> selectByPage(@Param("offset") int offset,
-                                   @Param("limit") int limit);
+    List<Transaction> selectByPage(int offset, int limit);
 
     /**
      * 统计总交易数

@@ -5,8 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 
 /**
  * 分页请求DTO
@@ -20,7 +21,7 @@ public class PageRequest {
     @Min(value = 1, message = "page must greater than 0")
     private Integer page = 1;
     
-    @Min(value = 1, message = "size of page must greater than 0")
-    @Max(value = 100, message = "size of page mus less than 100")
+    @Min(value = 1, message = "size must greater than 0")
+    @Max(value = 100, message = "size must less than 100")
     private Integer size = 20;
 }

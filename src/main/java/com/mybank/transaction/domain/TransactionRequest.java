@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 /**
@@ -31,7 +31,7 @@ public class TransactionRequest {
     @DecimalMax(value = "999999999.99", message = "amount must less than 999999999.99")
     private BigDecimal amount;
     
-    @Pattern(regexp = "^[A-Z]{3}$", message = "CNY must be 3 uppercase letter")
+    @Pattern(regexp = "^[A-Z]{3}$", message = "currency must be 3 uppercase letters")
     private String currency = "CNY";
     
     @Size(max = 500, message = "description can't exceed 500 characters")

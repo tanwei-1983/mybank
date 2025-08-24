@@ -31,8 +31,6 @@ public class TransactionService {
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction createTransaction(TransactionRequest request) {
         log.info("Create Transaction: {}", request);
-
-
         Transaction transaction = Transaction.builder()
                 .id(SnowflakeIdWorker.getInstance().genNextId())
                 .accountNumber(request.getAccountNumber())

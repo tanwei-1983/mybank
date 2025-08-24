@@ -4,11 +4,14 @@ import com.mybank.transaction.domain.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +37,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DuplicateTransactionException.class)
     public ResponseEntity<ApiResponse<Void>> handleDuplicateTransactionException(DuplicateTransactionException e) {
-        log.warn("重复交易: {}", e.getMessage());
+        log.warn("duplicate transaction: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error(e.getMessage()));
     }
@@ -42,8 +45,8 @@ public class GlobalExceptionHandler {
     /**
      * 处理参数验证异常
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(MethodArgumentNotValidException e) {
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(BindException e) {
         log.warn("参数验证失败: {}", e.getMessage());
         
         Map<String, String> errors = new HashMap<>();
@@ -55,17 +58,17 @@ public class GlobalExceptionHandler {
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 //                .body(ApiResponse.error("参数验证失败", errors));
-                .body(ApiResponse.error("参数验证失败:" + errors));
+                .body(ApiResponse.error("parameters validate error:" + errors.values()));
     }
 
     /**
      * 处理约束验证异常
      */
-    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConstraintViolationException(jakarta.validation.ConstraintViolationException e) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleConstraintViolationException(ConstraintViolationException e) {
         log.warn("约束验证失败: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("参数验证失败: " + e.getMessage()));
+                .body(ApiResponse.error("constraints check error: " + e.getMessage()));
     }
 
     /**
@@ -75,7 +78,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException e) {
         log.error("运行时异常: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("服务器内部错误"));
+                .body(ApiResponse.error("internal server error"));
     }
 
     /**
@@ -85,6 +88,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         log.error("未知异常: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("服务器内部错误"));
+                .body(ApiResponse.error("internal server error"));
     }
 }

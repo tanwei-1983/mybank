@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-tom
+spec:
+  selector:
+    matchLabels:
+      run: app-tom
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: app-tom
+    spec:
+      containers:
+        - name: app-tom
+          image: app-tom:1.0
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-tom
+spec:
+  type: NodePort
+  selector:
+    run: app-tom
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080

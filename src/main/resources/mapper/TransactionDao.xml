@@ -55,12 +55,11 @@
     </delete>
 
     <select id="selectByPage" resultMap="TransactionResultMap">
-        SELECT
-        t1.id, t1.account_number, t1.transaction_type, t1.amount, t1.currency,
-        t1.description, t1.category, t1.status, t1.created_at, t1.updated_at
-        FROM t_r_transaction t1
-        join (select id from t_r_transaction LIMIT #{limit} OFFSET #{offset})t2 on t1.id = t2.id
-        order by t1.id
+        SELECT t2.id, t2.account_number, t2.transaction_type, t2.amount, t2.currency,
+               t2.description, t2.category, t2.status, t2.created_at, t2.updated_at
+        FROM (select id from t_r_transaction LIMIT #{limit} OFFSET #{offset}) as t1
+        JOIN t_r_transaction t2 on t1.id = t2.id
+        order by id
     </select>
 
     <select id="countTotal" resultType="long">
