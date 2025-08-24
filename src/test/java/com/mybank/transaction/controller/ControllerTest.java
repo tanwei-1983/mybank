@@ -78,7 +78,7 @@ class ControllerTest {
         when(transactionService.createTransaction(any(TransactionRequest.class))).thenReturn(response);
 
         // 执行测试
-        mockMvc.perform(post("/api/v1/mybank/transactions")
+        mockMvc.perform(post("/v1/mybank/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -102,7 +102,7 @@ class ControllerTest {
                 .build();
 
         // 执行测试
-        mockMvc.perform(post("/api/v1/mybank/transactions")
+        mockMvc.perform(post("/v1/mybank/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -125,7 +125,7 @@ class ControllerTest {
                 .thenThrow(new DuplicateTransactionException("transaction conflict"));
 
         // 执行测试
-        mockMvc.perform(post("/api/v1/mybank/transactions")
+        mockMvc.perform(post("/v1/mybank/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
@@ -162,7 +162,7 @@ class ControllerTest {
                 .thenReturn(response);
 
         // 执行测试
-        mockMvc.perform(put("/api/v1/mybank/transactions/{id}", transactionId)
+        mockMvc.perform(put("/v1/mybank/transactions/{id}", transactionId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -193,7 +193,7 @@ class ControllerTest {
                 .thenThrow(new TransactionNotFoundException("交易不存在"));
 
         // 执行测试
-        mockMvc.perform(put("/api/v1/mybank/transactions/{id}", transactionId)
+        mockMvc.perform(put("/v1/mybank/transactions/{id}", transactionId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
@@ -206,7 +206,7 @@ class ControllerTest {
         doNothing().when(transactionService).deleteTransaction(transactionId);
 
         // 执行测试
-        mockMvc.perform(delete("/api/v1/mybank/transactions/{id}", transactionId))
+        mockMvc.perform(delete("/v1/mybank/transactions/{id}", transactionId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("delete transaction success"));
@@ -221,7 +221,7 @@ class ControllerTest {
         doThrow(new TransactionNotFoundException("交易不存在"))
                 .when(transactionService).deleteTransaction(transactionId);
 
-        mockMvc.perform(delete("/api/v1/mybank/transactions/{id}", transactionId))
+        mockMvc.perform(delete("/v1/mybank/transactions/{id}", transactionId))
                 .andExpect(status().isNotFound());
 
     }
@@ -267,7 +267,7 @@ class ControllerTest {
         when(transactionService.getAllTransactions(any(PageRequest.class))).thenReturn(pageResponse);
 
         // 执行测试
-        mockMvc.perform(get("/api/v1/mybank/transactions")
+        mockMvc.perform(get("/v1/mybank/transactions")
                         .param("page", "1")
                         .param("size", "10"))
                 .andExpect(status().isOk())
@@ -296,7 +296,7 @@ class ControllerTest {
         when(transactionService.getAllTransactions(any(PageRequest.class))).thenReturn(pageResponse);
 
         // 执行测试
-        mockMvc.perform(get("/api/v1/mybank/transactions")
+        mockMvc.perform(get("/v1/mybank/transactions")
                         .param("page", "1")
                         .param("size", "10"))
                 .andExpect(status().isOk())
@@ -311,7 +311,7 @@ class ControllerTest {
     @Test
     void testGetAllTransactions_InvalidPageRequest() throws Exception {
         // 执行测试 - 无效的分页参数
-        mockMvc.perform(get("/api/v1/mybank/transactions")
+        mockMvc.perform(get("/v1/mybank/transactions")
                         .param("page", "0") // 无效的页码
                         .param("size", "0")) // 无效的页面大小
                 .andExpect(status().isBadRequest());
