@@ -17,7 +17,7 @@ import javax.validation.constraints.Min;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/mybank/transactions")
+@RequestMapping("/v1/mybank/transactions")
 @RequiredArgsConstructor
 @Validated
 public class TransactionController {

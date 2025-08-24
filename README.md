@@ -32,9 +32,9 @@ kubectl apply -f deployment.yaml
 java -jar transaction-management-1.0.0.jar
 ```
 ## User Interface
-### http://localhost:30080
+### http://localhost:30080/api/
 
-## API document
+## API brief operation guide
 ### 1. create transacion
 ```bash
 curl -X POST 'http://localhost:30080/api/v1/mybank/transactions' -H "Content-Type: application/json" \
@@ -69,8 +69,13 @@ curl -X DELETE 'http://localhost:30080/api/v1/mybank/transactions/{id}'
   "timestamp": "2024-01-01T12:00:00"
 }
 ```
+## API documents
+http://localhost:30080/api/swagger-ui/index.html
+
 ## Test
 ### run unit test
+**Note: if your local maven repository doesn't contain springboot, mybatis, h2, etc, you may have to wait a long time for them to finish downloading.**
+
 ```bash
 mvn test -Dtest=TransactionServiceTest
 mvn test -Dtest=TransactionDaoTest
