@@ -361,7 +361,7 @@
                 }
 
                 const result = await response.json();
-                const transactions = result.data.;
+                const transactions = result.data.content;
                 totalPages = result.data.totalPages;
 
                 if (transactions.length === 0) {
@@ -391,7 +391,7 @@
                 const statusBadge = getStatusBadge(transaction.status);
                 
                 row.innerHTML = `
-                    <td><strong>${transaction.id}</strong></td>
+                    <td><strong>${transaction.tid}</strong></td>
                     <td><code>${transaction.accountNumber}</code></td>
                     <td><span class="badge bg-info">${typeText}</span></td>
                     <td class="${amountClass}"><strong>${transaction.amount} ${transaction.currency}</strong></td>
@@ -405,7 +405,7 @@
                             <button class="btn btn-outline-primary" onclick="editTransaction(${JSON.stringify(transaction).replace(/"/g, '&quot;')})" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button class="btn btn-outline-danger" onclick="showDeleteConfirm(${transaction.id}, '${transaction.accountNumber}', ${transaction.amount}, '${transaction.currency}')" title="Delete">
+                            <button class="btn btn-outline-danger" onclick="showDeleteConfirm('${transaction.tid}', '${transaction.accountNumber}', ${transaction.amount}, '${transaction.currency}')" title="Delete">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -478,7 +478,7 @@
             isEditing = true;
             
             document.getElementById('formTitle').innerHTML = '<i class="bi bi-pencil-square"></i> Edit Transaction';
-            document.getElementById('transactionId').value = transaction.id;
+            document.getElementById('transactionId').value = transaction.tid;
             document.getElementById('accountNumber').value = transaction.accountNumber;
             document.getElementById('transactionType').value = transaction.transactionType;
             document.getElementById('amount').value = transaction.amount;
@@ -510,11 +510,11 @@
         }
 
         // Show delete confirmation
-        function showDeleteConfirm(id, accountNumber, amount, currency) {
-            deleteTransactionId = id;
+        function showDeleteConfirm(tid, accountNumber, amount, currency) {
+            deleteTransactionId = tid;
             document.getElementById('deleteTransactionInfo').innerHTML = `
                 <div class="alert alert-warning">
-                    <strong>Transaction ID:</strong> ${id}<br>
+                    <strong>Transaction ID:</strong> ${tid}<br>
                     <strong>Account Number:</strong> ${accountNumber}<br>
                     <strong>Amount:</strong> ${amount} ${currency}
                 </div>

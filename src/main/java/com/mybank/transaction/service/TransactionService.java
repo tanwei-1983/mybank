@@ -31,8 +31,10 @@ public class TransactionService {
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction createTransaction(TransactionRequest request) {
 //        log.info("Create Transaction: {}", request);
+        long id = SnowflakeIdWorker.getInstance().genNextId();
         Transaction transaction = Transaction.builder()
-                .id(SnowflakeIdWorker.getInstance().genNextId())
+                .id(id)
+                .tid(String.valueOf(id))
                 .accountNumber(request.getAccountNumber())
                 .transactionType(request.getTransactionType())
                 .amount(request.getAmount())
@@ -58,6 +60,7 @@ public class TransactionService {
 //        log.info("update transaction: id={}, request={}", id, request);
         Transaction transaction = Transaction.builder()
                 .id(id)
+                .tid(String.valueOf(id))
                 .accountNumber(request.getAccountNumber())
                 .transactionType(request.getTransactionType())
                 .amount(request.getAmount())
@@ -92,7 +95,7 @@ public class TransactionService {
         
         int offset = (pageRequest.getPage() - 1) * pageRequest.getSize();
         List<Transaction> tlist = transactionDao.selectByPage(offset, pageRequest.getSize());
-        
+
         long totalElements = transactionDao.countTotal();
         int totalPages = (int) Math.ceil((double) totalElements / pageRequest.getSize());
         

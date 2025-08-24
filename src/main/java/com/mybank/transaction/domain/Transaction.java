@@ -19,7 +19,8 @@ public class Transaction {
      * 主键ID
      */
     private Long id;
-    
+    private String tid;
+
     /**
      * 账户号码
      */
