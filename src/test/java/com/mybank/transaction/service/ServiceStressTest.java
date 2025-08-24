@@ -105,8 +105,12 @@ public class ServiceStressTest {
         }
         close(executor);
         double delReqs = nums*1000.00/(System.currentTimeMillis()-t1);
-        System.out.println("error transaction ratio: " + atomInt.intValue()*1.0/ totalNum +", total api calls: " + totalNum +", createTransaction req/s: " + createTransReq +", getAllTransactions req/s: "
-                + getAllTransactionsReqs + ", updateTransaction req/s: " +updTransReqs + ", deleteTransaction req/s: " + delReqs);
+        System.out.println("error transaction ratio: " + atomInt.intValue()*1.0/ totalNum);
+        System.out.println("total api calls: " + totalNum);
+        System.out.println("createTransaction req/s: " + createTransReq);
+        System.out.println("getAllTransactions req/s: " + getAllTransactionsReqs);
+        System.out.println("updateTransaction req/s: " + updTransReqs);
+        System.out.println("deleteTransaction req/s: " + delReqs);
     }
 
     private void close(ExecutorService executor){

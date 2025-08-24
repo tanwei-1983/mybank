@@ -72,6 +72,7 @@ curl -X DELETE 'http://localhost:30080/api/v1/mybank/transactions/{id}'
 ```bash
 mvn test -Dtest=TransactionServiceTest
 mvn test -Dtest=TransactionDaoTest
+mvn test -Dtest=ControllerTest
 ```
 
 ### run stress test
@@ -79,12 +80,11 @@ mvn test -Dtest=TransactionDaoTest
 ```bash
 mvn test -Dtest=ServiceStressTest
 ```
-2. **500 concurrency, 500,000 calls per API. The test laptop has only 4 Intel cores and get the results as below:**   
-**error transaction ratio**: 0.0   
-**createTransaction req/s**: 14143  
-**getAllTransactions req/s**: 70432  
-**updateTransaction req/s**: 14398  
-**deleteTransaction req/s**: 15934
+2. There is 4 apis: createTransaction, getAllTransactions, updateTransaction, deleteTransaction.  
+ 500 concurrency, 500,000 calls per API, The total number of calls is 2,000,000.  
+ The test laptop has only 4 Intel cores and get the results as below:   
+   ![stress_test_result](./images/stress_test.gif "stress_test_result")
+
 3. **NOTE:** Since the server and client are deployed on the same laptop, and we open 500 threads to mock concurrent requests, this service spent too much time on thread context switch. The root cause of the problem lies in the insufficient number of CPUs. 
 
 ## project structure
