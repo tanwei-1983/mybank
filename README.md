@@ -31,6 +31,8 @@ kubectl apply -f deployment.yaml
 ```bash
 java -jar transaction-management-1.0.0.jar
 ```
+**Attention: if you use this approach to run the app, all the ports used below should be changed from 30080 to 8080**
+
 ## User Interface
 ### http://localhost:30080/api/
 
