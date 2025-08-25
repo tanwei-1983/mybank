@@ -96,6 +96,11 @@ mvn test -Dtest=ServiceStressTest
 
 3. **NOTE:** Since the server and client are deployed on the same laptop, and we open 500 threads to mock concurrent requests, this service spent too much time on thread context switch. The root cause of the problem lies in the insufficient number of CPUs. 
 
+4. **run the api stress test**
+```bash
+java -jar apitest-1.0.0.jar 30080  #or 8080
+```
+100 concurrency, 100,000 calls per API, The total number of calls is 400,000.
 ## project structure
 ```
 src/
