@@ -85,7 +85,7 @@ mvn test -Dtest=ControllerTest
 ```
 
 ### run stress test
-1. **run the mvn command**
+1. **run the service stress test**
 ```bash
 mvn test -Dtest=ServiceStressTest
 ```
