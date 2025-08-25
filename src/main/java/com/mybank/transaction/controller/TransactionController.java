@@ -44,10 +44,7 @@ public class TransactionController {
             @PathVariable @Min(1) Long id,
             @Valid @RequestBody TransactionRequest request) {
 //        log.info("update transaction success: id={}, request={}", id, request);
-
         Transaction response = transactionService.updateTransaction(id, request);
-        transactionService.updateTransaction(id, request);
-
         return ResponseEntity.ok(ApiResponse.success("update transaction success", response));
     }
 

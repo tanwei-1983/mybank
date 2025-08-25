@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -92,11 +93,21 @@ public class TransactionService {
     @Cacheable(value = "transactions", key = "'all_' + #pageRequest.page + '_' + #pageRequest.size")
     public PageResponse<Transaction> getAllTransactions(PageRequest pageRequest) {
 //        log.debug("分页查询所有交易: {}", pageRequest);
-        
+        long totalElements = transactionDao.countTotal();
+        if (totalElements == 0L) {
+            return PageResponse.<Transaction>builder()
+                    .content(new ArrayList<>())
+                    .page(pageRequest.getPage())
+                    .size(pageRequest.getSize())
+                    .totalElements(0)
+                    .totalPages(0)
+                    .hasNext(false)
+                    .hasPrevious(false)
+                    .build();
+        }
         int offset = (pageRequest.getPage() - 1) * pageRequest.getSize();
         List<Transaction> tlist = transactionDao.selectByPage(offset, pageRequest.getSize());
 
-        long totalElements = transactionDao.countTotal();
         int totalPages = (int) Math.ceil((double) totalElements / pageRequest.getSize());
         
         return PageResponse.<Transaction>builder()
