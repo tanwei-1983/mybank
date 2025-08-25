@@ -100,7 +100,8 @@ mvn test -Dtest=ServiceStressTest
 ```bash
 java -jar apitest-1.0.0.jar 30080  #or 8080
 ```
-100 concurrency, 100,000 calls per API, The total number of calls is 400,000.
+Client send http requests with 100 concurrency, 100,000 calls per API, The total number of calls is 400,000.  
+ApiTest.java in package com.mybank.transaction.util;
 ## project structure
 ```
 src/
