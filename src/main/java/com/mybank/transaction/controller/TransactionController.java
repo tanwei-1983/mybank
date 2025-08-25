@@ -1,5 +1,6 @@
 package com.mybank.transaction.controller;
 
+import com.mybank.transaction.dao.TransactionDao;
 import com.mybank.transaction.domain.*;
 import com.mybank.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * Transaction Controller
@@ -23,11 +25,12 @@ import javax.validation.constraints.Min;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final TransactionDao transactionDao;
 
     @PostMapping
     public ResponseEntity<ApiResponse<Transaction>> createTransaction(
             @Valid @RequestBody TransactionRequest request) {
-        log.info("create transaction request: {}", request);
+//        log.info("create transaction request: {}", request);
         
         Transaction response = transactionService.createTransaction(request);
 
@@ -40,7 +43,7 @@ public class TransactionController {
     public ResponseEntity<ApiResponse<Transaction>> updateTransaction(
             @PathVariable @Min(1) Long id,
             @Valid @RequestBody TransactionRequest request) {
-        log.info("update transaction success: id={}, request={}", id, request);
+//        log.info("update transaction success: id={}, request={}", id, request);
 
         Transaction response = transactionService.updateTransaction(id, request);
         transactionService.updateTransaction(id, request);
@@ -54,7 +57,7 @@ public class TransactionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteTransaction(
             @PathVariable @Min(1) Long id) {
-        log.info("delete transaction request: id={}", id);
+//        log.info("delete transaction request: id={}", id);
         
         transactionService.deleteTransaction(id);
         
@@ -67,10 +70,15 @@ public class TransactionController {
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<Transaction>>> getAllTransactions(
             @Valid PageRequest pageRequest) {
-        log.info("Pagination query for all transaction requests: {}", pageRequest);
+//        log.info("Pagination query for all transaction requests: {}", pageRequest);
         
         PageResponse<Transaction> response = transactionService.getAllTransactions(pageRequest);
         
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<String>>> getAllTransactions() {
+        var slist = transactionDao.listId().stream().map(String::valueOf).toList();
+        return ResponseEntity.ok(ApiResponse.success(slist));
     }
 }
