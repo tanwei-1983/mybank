@@ -1,6 +1,6 @@
-# Bank Transaction Management System
+# Blank
 
-A bank transaction management system based on Spring Boot and Mybatis, which provides complete transaction CRUD operations, paginated queries, caching mechanisms, and support for containerized deployment.
+Blank
 
 ## Tech Stack
 - **JDK17/openjdk:17-jdk-slim**
