@@ -18,8 +18,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootTest
-@Transactional
-@Rollback
 public class ServiceStressTest {
     @Autowired
     private TransactionService transactionService;

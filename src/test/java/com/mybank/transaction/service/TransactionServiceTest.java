@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 @SpringBootTest
-@Transactional
-@Rollback
 class TransactionServiceTest {
     @Autowired
     private TransactionDao transactionMapper;
