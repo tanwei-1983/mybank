@@ -22,7 +22,7 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .maximumSize(100000)
+                .maximumSize(1000)
                 .expireAfterWrite(Duration.ofMinutes(30))
                 .recordStats());
         return cacheManager;
