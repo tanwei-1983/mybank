@@ -29,9 +29,7 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Transaction>> createTransaction(
-            @Valid @RequestBody TransactionRequest request) {
-//        log.info("create transaction request: {}", request);
-        
+            @Valid @RequestBody TransactionRequest request) {        
         Transaction response = transactionService.createTransaction(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -43,7 +41,6 @@ public class TransactionController {
     public ResponseEntity<ApiResponse<Transaction>> updateTransaction(
             @PathVariable @Min(1) Long id,
             @Valid @RequestBody TransactionRequest request) {
-//        log.info("update transaction success: id={}, request={}", id, request);
         Transaction response = transactionService.updateTransaction(id, request);
         return ResponseEntity.ok(ApiResponse.success("update transaction success", response));
     }
@@ -52,12 +49,8 @@ public class TransactionController {
      * 删除交易
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteTransaction(
-            @PathVariable @Min(1) Long id) {
-//        log.info("delete transaction request: id={}", id);
-        
-        transactionService.deleteTransaction(id);
-        
+    public ResponseEntity<ApiResponse<Void>> deleteTransaction(@PathVariable @Min(1) Long id) {        
+        transactionService.deleteTransaction(id);        
         return ResponseEntity.ok(ApiResponse.success("delete transaction success", null));
     }
 
@@ -65,14 +58,11 @@ public class TransactionController {
      * 分页查询所有交易
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<Transaction>>> getAllTransactions(
-            @Valid PageRequest pageRequest) {
-//        log.info("Pagination query for all transaction requests: {}", pageRequest);
-        
-        PageResponse<Transaction> response = transactionService.getAllTransactions(pageRequest);
-        
+    public ResponseEntity<ApiResponse<PageResponse<Transaction>>> getAllTransactions(@Valid PageRequest pageRequest) {        
+        PageResponse<Transaction> response = transactionService.getAllTransactions(pageRequest);        
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+    
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<String>>> getAllTransactions() {
         var slist = transactionDao.listId().stream().map(String::valueOf).toList();
