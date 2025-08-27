@@ -31,7 +31,6 @@ public class TransactionService {
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction createTransaction(TransactionRequest request) {
-//        log.info("Create Transaction: {}", request);
         long id = SnowflakeIdWorker.getInstance().genNextId();
         Transaction transaction = Transaction.builder()
                 .id(id)
@@ -51,14 +50,12 @@ public class TransactionService {
             throw new DuplicateTransactionException("duplicate transaction id");
         }
         
-//        log.info("Create Transaction Success: {}", transaction.getId());
         return transaction;
     }
 
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
     public Transaction updateTransaction(Long id, TransactionRequest request) {
-//        log.info("update transaction: id={}, request={}", id, request);
         Transaction transaction = Transaction.builder()
                 .id(id)
                 .tid(String.valueOf(id))
@@ -73,26 +70,19 @@ public class TransactionService {
                 .build();
 
         int updCnt = transactionDao.updTran(transaction);
-        if (updCnt == 0) throw new TransactionNotFoundException("transaction doesn't exist: " + id);
-        
-//        log.info("update transaction success: {}", id);
+        if (updCnt == 0) throw new TransactionNotFoundException("transaction doesn't exist: " + id);        
         return transaction;
     }
 
     @Transactional
     @CacheEvict(value = "transactions", allEntries = true)
-    public void deleteTransaction(Long id) {
-//        log.info("delete transaction: {}", id);
-        
-
+    public void deleteTransaction(Long id) {        
         int delCnt = transactionDao.deleteById(id);
         if (delCnt == 0) throw new TransactionNotFoundException("transaction doesn't exist: " + id);
-//        log.info("delete transaction success: {}", id);
     }
 
-    @Cacheable(value = "transactions", key = "'all_' + #pageRequest.page + '_' + #pageRequest.size")
+    @Cacheable(value = "transactions", key = "'all_' + #pageRequest.page + '_' + #pageRequest.size", sync = true)
     public PageResponse<Transaction> getAllTransactions(PageRequest pageRequest) {
-//        log.debug("分页查询所有交易: {}", pageRequest);
         long totalElements = transactionDao.countTotal();
         if (totalElements == 0L) {
             return PageResponse.<Transaction>builder()
