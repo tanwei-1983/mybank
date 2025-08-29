@@ -87,7 +87,7 @@ public class ServiceStressTest {
             });
         }
         close(executor);
-        double updTransReqs = nums*1000.00/(System.currentTimeMillis()-t1);
+        double updTransReqs = idList.size()*1000.00/(System.currentTimeMillis()-t1);
 
         executor = Executors.newFixedThreadPool(parallelDeg);
         totalNum += idList.size();
@@ -102,7 +102,7 @@ public class ServiceStressTest {
             });
         }
         close(executor);
-        double delReqs = nums*1000.00/(System.currentTimeMillis()-t1);
+        double delReqs = idList.size()*1000.00/(System.currentTimeMillis()-t1);
         System.out.println("error transaction ratio: " + atomInt.intValue()*1.0/ totalNum);
         System.out.println("total api calls: " + totalNum);
         System.out.println("createTransaction req/s: " + createTransReq);
