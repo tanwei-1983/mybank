@@ -62,7 +62,7 @@ public class ServiceStressTest {
         for (int i = 0; i < nums; ++i) {
             executor.submit(() -> {
                 try {
-                    PageRequest pageRequest = new PageRequest(10, 10);
+                    PageRequest pageRequest = new PageRequest(ThreadLocalRandom.current().nextInt(1, 11), ThreadLocalRandom.current().nextInt(1, 11)*10);
                     transactionService.getAllTransactions(pageRequest);
                 } catch (Exception e) {
                     atomInt.incrementAndGet();
