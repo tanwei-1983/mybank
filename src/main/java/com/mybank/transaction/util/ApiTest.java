@@ -95,8 +95,8 @@ public class ApiTest {
                 try {
                     // 构建查询参数
                     Map<String, String> params = new HashMap<>();
-                    params.put("page", "1");
-                    params.put("size", "10");
+                    params.put("page", String.valueOf(ThreadLocalRandom.current().nextInt(1, 11)));
+                    params.put("size", String.valueOf(ThreadLocalRandom.current().nextInt(1, 11)*10));
                     // 发送GET请求
                     HttpResponse<String> response = HttpClientUtil.getWithParams(BASEURL, params);
 
