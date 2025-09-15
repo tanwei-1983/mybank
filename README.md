@@ -81,7 +81,6 @@ http://localhost:30080/api/swagger-ui/index.html
 ```bash
 mvn test -Dtest=TransactionServiceTest
 mvn test -Dtest=TransactionDaoTest
-mvn test -Dtest=ControllerTest
 ```
 
 ### run stress test
